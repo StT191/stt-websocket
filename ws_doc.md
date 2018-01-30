@@ -17,4 +17,4 @@
       default is 5000 (5 sec)
     * `protocol` {String[]} a list of sub-protocols for handshake
     * `headers` {Object} a list of optional headers to be sent to the server
-    * `auth` {string} Basic authentication i.e. "user:password" to compute an Authorization header
+    * `auth` {string} Basic authentication i.e. `"user:password"` to compute an Authorization header
