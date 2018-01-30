@@ -33,6 +33,7 @@ function WebSocket(socket, server=false, settings={}) {
 
     client.maxMessage = settings.maxMessage || defaultMaxMessage;
     client.timeout = settings.timeout || defaultTimeout;
+    client.validateUTF8 = settings.validateUTF8;
 
     client.mask = (server) ? 0 : 1; // sets masking bit at each send
 
@@ -161,12 +162,12 @@ function WebSocket(socket, server=false, settings={}) {
             switch(opcode) {
                 case 0: /* "continue" */ case 1: /* "text" */ case 2: // "binary"
                     if (opcode===1) message.text = true;
-                    //if (message.text && !validUTF8(load)) return recvError(client, "utf8");
+                    //if (message.text && client.validateUTF8 && !validUTF8(load)) return recvError(client, "utf8");
                     message.push(load);
                     message.size += load.length;
                     if (FIN) {
                         let Message = Buffer.concat(message, message.size);
-                        if (message.text && !validUTF8(Message)) return recvError(client, "utf8");
+                        if (message.text && client.validateUTF8 && !validUTF8(Message)) return recvError(client, "utf8");
                         if (message.text) Message = Message.toString();
                         message = [];
                         message.size = 0;
@@ -523,13 +524,6 @@ Object.assign(WebSocketServer.prototype, EventEmitter.prototype, {
 
 
 
-
-// http resources
-const http = require("http");
-const https = require("https");
-
-
-
 // websocket server already integrated with http server, ready to listen
 function createServer(settings={}, onConnect=null) {
     if (typeof settings === "function") {
@@ -544,7 +538,7 @@ function createServer(settings={}, onConnect=null) {
 
     const wsServer = WebSocketServer(settings, onConnect);
 
-    const httpServer = (tls ? https : http).createServer(tls);
+    const httpServer = (tls ? require("https") : require("http")).createServer(tls);
 
     httpServer.on("upgrade", wsServer);
     httpServer.timeout = 0;
@@ -578,7 +572,10 @@ function connect(url, settings={}, callback) {
 
     url = url_parse(url);
 
-    const [get, protocol] = {"ws:": [http.get, "http:"], "wss:": [https.get, "https:"]}[url.protocol];
+    const [get, protocol] = {
+        "ws:": [require("http").get, "http:"],
+        "wss:": [require("https").get, "https:"]
+    }[url.protocol];
 
     const headers = Object.assign(settings.headers || {}, {
         "Upgrade": "websocket",
