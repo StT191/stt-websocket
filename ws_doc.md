@@ -15,6 +15,6 @@
       default is 134217728 (128 MiB)
     * `timeout` *\<number>*  close pending connect or enforce pending close after timeout (in ms),
       default is 5000 (5 sec)
-    * `protocol` *\<String[ ]>* a list of sub-protocols for handshake
+    * `protocol` *\<string[ ]>* a list of sub-protocols for handshake
     * `headers` *\<Object>* a list of optional headers to be sent to the server
     * `auth` *\<string>* Basic authentication i.e. `"user:password"` to compute an Authorization header
