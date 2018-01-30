@@ -5,7 +5,7 @@
 * `url` _\<string>_
     e.g. "ws://my-websocket.com/chat" | "wss://secure-websocket.com/login"
 * `callback(client, error)` _\<function>_
-    will be called on connection or error
+    will be called on connection or in case of error
     * `client` _\<WebSocket>_ will be null in case of error
     * `error` _\<Error>_ only in case of error, `error.code = "ECONNECT"`, client will be null
 * `settings` _\<Object>_
