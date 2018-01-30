@@ -8,7 +8,7 @@
 * `callback(client, error)` {function} 
     will be called on connection or error
     * `client` {WebSocket} will be null in case of error
-    * `error` {Error} only in case of error, error.code = "ECONNECT", client will be null
+    * `error` {Error} only in case of error, `error.code = "ECONNECT"`, client will be null
 
 * `settings` {Object}
     * `maxMessage` {number} disconnect on receiving a message bigger than .maxMessage (in bytes),
